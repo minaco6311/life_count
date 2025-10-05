@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人生カウンター - あなたはすごい!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #6b5b95;
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #6b5b95;
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+
+        .input-section {
+            background: #e0c3fc;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 12px 12px 24px rgba(107, 91, 149, 0.15),
+                        -12px -12px 24px rgba(255, 255, 255, 0.7);
+        }
+
+        label {
+            display: block;
+            color: #6b5b95;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.125rem;
+            border-radius: 1rem;
+            border: none;
+            background: #e0c3fc;
+            color: #6b5b95;
+            box-shadow: inset 6px 6px 12px rgba(107, 91, 149, 0.15),
+                        inset -6px -6px 12px rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            box-shadow: inset 6px 6px 12px rgba(107, 91, 149, 0.15),
+                        inset -6px -6px 12px rgba(255, 255, 255, 0.7),
+                        0 0 0 3px rgba(142, 197, 252, 0.3);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #ffe0b2 0%, #ffccbc 50%, #fff9c4 100%);
+            border-radius: 2rem;
+            padding: 3rem 2rem;
+            box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.1),
+                        -12px -12px 24px rgba(255, 255, 255, 0.9);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 16px 16px 32px rgba(0, 0, 0, 0.12),
+                        -16px -16px 32px rgba(255, 255, 255, 0.9);
+        }
+
+        .ramen-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .message {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #6b5b95;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .count-display {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #d84315;
+            margin: 1rem 0;
+            text-shadow: 3px 3px 6px rgba(255,255,255,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .count-display {
+                font-size: 3.5rem;
+            }
+        }
+
+        .unit {
+            font-size: 2rem;
+            color: #6b5b95;
+            margin-bottom: 2rem;
+        }
+
+        .praise-message {
+            font-size: 1.5rem;
+            color: #6b5b95;
+            opacity: 0.9;
+            margin-top: 1.5rem;
+            font-weight: 600;
+        }
+
+        .note {
+            font-size: 1rem;
+            color: #6b5b95;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+
+        .summary-section {
+            background: #e0c3fc;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 12px 12px 24px rgba(107, 91, 149, 0.15),
+                        -12px -12px 24px rgba(255, 255, 255, 0.7);
+            margin-top: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6b5b95;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box {
+            background: #e0c3fc;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: inset 6px 6px 12px rgba(107, 91, 149, 0.15),
+                        inset -6px -6px 12px rgba(255, 255, 255, 0.7);
+        }
+
+        .summary-text {
+            color: #1f2937;
+            font-size: 1.125rem;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+        }
+
+        .copy-button {
+            width: 100%;
+            margin-top: 1rem;
+            background: #b8d8f8;
+            color: #6b5b95;
+            font-weight: bold;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-size: 1.125rem;
+            box-shadow: 8px 8px 16px rgba(107, 91, 149, 0.15),
+                        -8px -8px 16px rgba(255, 255, 255, 0.9);
+            transition: all 0.3s;
+        }
+
+        .copy-button:hover {
+            box-shadow: 12px 12px 24px rgba(107, 91, 149, 0.2),
+                        -12px -12px 24px rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+        }
+
+        .copy-button:active {
+            box-shadow: inset 4px 4px 8px rgba(107, 91, 149, 0.15),
+                        inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+            transform: translateY(0);
+        }
+
+        .placeholder {
+            text-align: center;
+            color: #6b5b95;
+            font-size: 1.25rem;
+            margin-top: 2rem;
+            opacity: 0.8;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎂 人生カウンター 🎂</h1>
+        <p class="subtitle">あなたの人生をカップラーメンで褒めます!</p>
+
+        <div class="input-section">
+            <label for="birthdate">あなたの生年月日を入力してください</label>
+            <input type="date" id="birthdate">
+        </div>
+
+        <div id="results" class="hidden">
+            <div class="result-card">
+                <div class="ramen-icon">🍜</div>
+                <div class="message">
+                    カップラーメン<br>
+                    <span class="count-display" id="cupnoodles">0</span><br>
+                    <span class="unit">個</span><br>
+                    作れる分生きてるよ!
+                </div>
+                <div class="praise-message" id="praiseMessage">すごい!よく頑張ったね!</div>
+                <div class="note">(3分で1個作れる計算)</div>
+            </div>
+
+            <div class="summary-section">
+                <h3 class="summary-title">📋 結果まとめ</h3>
+                <div class="summary-box">
+                    <pre class="summary-text" id="summaryText"></pre>
+                    <button class="copy-button" onclick="copyResults()">📋 結果をコピー</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="placeholder" class="placeholder">
+            👆 生年月日を入力してください
+        </div>
+    </div>
+
+    <script>
+        let birthDate = '';
+        let updateInterval;
+
+        document.getElementById('birthdate').addEventListener('change', function(e) {
+            birthDate = e.target.value;
+            if (birthDate) {
+                document.getElementById('placeholder').classList.add('hidden');
+                document.getElementById('results').classList.remove('hidden');
+                
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                }
+                
+                updateTime();
+                updateInterval = setInterval(updateTime, 1000);
+            }
+        });
+
+        function getPraiseMessage(count) {
+            if (count < 100000) return "すごい!よく頑張ったね!";
+            if (count < 500000) return "素晴らしい!毎日を大切に過ごしてるね!";
+            if (count < 1000000) return "すごすぎる!あなたは本当に素敵だよ!";
+            if (count < 5000000) return "驚異的!あなたの人生は宝物だね!";
+            if (count < 10000000) return "信じられない!あなたは奇跡そのものだよ!";
+            return "圧倒的!あなたの存在が世界を照らしてるよ!";
+        }
+
+        function updateTime() {
+            if (!birthDate) return;
+
+            const birth = new Date(birthDate);
+            const now = new Date();
+            const diff = now - birth;
+
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const cupNoodles = Math.floor(minutes / 3);
+
+            document.getElementById('cupnoodles').textContent = cupNoodles.toLocaleString();
+            
+            const praiseMsg = getPraiseMessage(cupNoodles);
+            document.getElementById('praiseMessage').textContent = praiseMsg;
+
+            const summaryText = `🎂 人生カウンター 結果 🎂
+
+計測日時: ${now.toLocaleString('ja-JP')}
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+カップラーメン ${cupNoodles.toLocaleString()} 個
+作れる分生きてるよ!
+
+${praiseMsg}
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+(3分で1個作れる計算)`;
+
+            document.getElementById('summaryText').textContent = summaryText;
+        }
+
+        function copyResults() {
+            const text = document.getElementById('summaryText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('📋 クリップボードにコピーしました!');
+            }).catch(err => {
+                console.error('コピーに失敗しました:', err);
+            });
+        }
+    </script>
+</body>
+</html>
